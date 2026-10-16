@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>My Student Planner</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#fff4f7;--surface:#fff;--text:#3a2a33;--muted:#8a7480;--accent:#d9487f;--onaccent:#fff;--line:#f1d9e3}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1d1419;--surface:#2a1d24;--text:#f7e9ef;--muted:#b99ca9;--accent:#f08ab4;--onaccent:#2a1220;--line:#45303b}}
+:root[data-theme="dark"]{--bg:#1d1419;--surface:#2a1d24;--text:#f7e9ef;--muted:#b99ca9;--accent:#f08ab4;--onaccent:#2a1220;--line:#45303b}
+*,*:before,*:after{box-sizing:inherit}
+html,body{margin:0}
+body{background:var(--bg);color:var(--text);font:16px/1.5 Nunito,system-ui,sans-serif;padding:16px}
+main{max-width:640px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+h1{font-size:1.6rem;margin:0;line-height:1.2}
+h2{font-size:1.15rem;margin:0 0 10px}
+.sub{color:var(--muted);margin:2px 0 0}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.coins{background:var(--surface);border:2px solid var(--line);border-radius:999px;padding:6px 14px;font-weight:800;white-space:nowrap}
+section{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px}
+button,input,select{font:inherit;color:inherit}
+input,select{width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+label{display:block;font-weight:700;font-size:.9rem;margin-bottom:10px}
+label input,label select{margin-top:4px;font-weight:400}
+button{cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.btn{background:var(--accent);color:var(--onaccent);border:0;border-radius:10px;padding:10px 16px;font-weight:800}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
+/* ID card */
+#card{--cbg:#d9487f;--cfg:#fff;background:var(--cbg);color:var(--cfg);border-radius:18px;padding:16px;box-shadow:0 8px 24px rgba(0,0,0,.18);position:relative;overflow:hidden;min-height:210px;display:flex;flex-direction:column;gap:14px}
+.ch{display:flex;align-items:center;gap:10px;border-bottom:2px solid currentColor;padding-bottom:10px}
+.ch b{flex:1;font-size:1.05rem}
+.logo{font-size:1.8rem}
+.cb{display:flex;gap:14px;align-items:center}
+.av{width:92px;height:112px;border-radius:12px;background:rgba(255,255,255,.35);border:3px solid currentColor;display:grid;place-items:center;font-size:3.2rem;overflow:hidden;flex:none}
+.av img{width:100%;height:100%;object-fit:cover}
+.nm{font-size:1.4rem;font-weight:800;line-height:1.2;overflow-wrap:anywhere}
+.cf{display:flex;flex-direction:column;gap:3px;min-width:0}
+.st{position:absolute;right:14px;bottom:44px;font-size:2.2rem;transform:rotate(12deg)}
+.cn{margin-top:auto;font-size:.8rem;opacity:.85;letter-spacing:.06em}
+/* pickers */
+.pk{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.pk button{min-width:42px;height:42px;border-radius:10px;border:2px solid var(--line);background:var(--bg);font-size:1.25rem}
+.pk button.sel{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent)}
+.pk .sw{width:42px;border-radius:50%}
+.pl{font-weight:700;font-size:.9rem;margin-bottom:6px}
+.up{font-size:.9rem;font-weight:700;border:2px dashed var(--line);border-radius:10px;padding:0 12px;height:42px;display:inline-flex;align-items:center;cursor:pointer}
+/* tasks */
+.tabs{display:flex;gap:6px;margin:12px 0;flex-wrap:wrap}
+.tabs button{border:1px solid var(--line);background:var(--bg);border-radius:999px;padding:5px 14px;font-weight:700}
+.tabs button.sel{background:var(--accent);color:var(--onaccent);border-color:var(--accent)}
+.task{display:flex;align-items:center;gap:10px;padding:10px 0;border-top:1px solid var(--line)}
+.task .ck{width:30px;height:30px;border-radius:50%;border:2px solid var(--accent);background:none;flex:none;font-weight:800;color:var(--onaccent)}
+.task.done .ck{background:var(--accent)}
+.task.done .tt{text-decoration:line-through;color:var(--muted)}
+.tt{flex:1;min-width:0;overflow-wrap:anywhere}
+.chip{font-size:.75rem;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:1px 9px;color:var(--muted);margin-left:6px;white-space:nowrap}
+.x{background:none;border:0;color:var(--muted);font-size:1.2rem}
+.empty{color:var(--muted);padding:14px 0 4px}
+/* shop */
+.items{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px;margin-bottom:14px}
+.item{border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center;background:var(--bg)}
+.item .pv{font-size:1.8rem;height:42px;display:grid;place-items:center}
+.item .pv i{width:34px;height:34px;border-radius:50%;display:block}
+.item small{display:block;color:var(--muted)}
+.item button{margin-top:6px;width:100%;border:0;border-radius:8px;padding:5px;background:var(--accent);color:var(--onaccent);font-weight:800}
+.item button:disabled{opacity:.45;cursor:not-allowed}
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--text);color:var(--bg);padding:10px 18px;border-radius:999px;font-weight:700;opacity:0;pointer-events:none;transition:opacity .2s}
+#toast.on{opacity:1}
+.vc{border:2px dashed var(--accent);border-radius:14px;padding:14px;margin-top:12px;background:var(--bg)}.vc.sent{border-style:solid}.vc h3{margin:0 0 10px;font-size:1.05rem}.vc textarea{width:100%;margin-top:4px;padding:9px 11px;border:1px solid var(--line);border-radius:10px;background:var(--surface);font:inherit;font-weight:400;color:inherit;resize:vertical}.badge{font-size:.72rem;font-weight:800;background:var(--accent);color:var(--onaccent);border-radius:999px;padding:2px 10px;margin-left:6px;vertical-align:middle}.fr-shadow{box-shadow:5px 5px 0 var(--cfg)}.fr-dashed{border-style:dashed}.fr-double{border-style:double;border-width:6px}.fr-gold{border-color:#e5b100;box-shadow:0 0 0 3px #fff1a8,0 0 14px #e5b100}
+@media (max-width:420px){.grid2{grid-template-columns:1fr}.av{width:76px;height:96px;font-size:2.6rem}}
+</style>
+</head>
+<body>
+<main>
+  <div class="top">
+    <div><h1>Happy Women's Day 🌷</h1><p class="sub">Your card, your tasks, your rewards.</p></div>
+    <div class="coins" id="coins">🪙 0</div>
+  </div>
+
+  <div id="card" aria-label="Student ID card"></div>
+
+  <section>
+    <h2>Customize</h2>
+    <div class="grid2">
+      <label>Name<input id="f-name" maxlength="40" placeholder="Your name"></label>
+      <label>School<input id="f-school" maxlength="50" placeholder="Your school"></label>
+      <label>Birthday<input id="f-birthday" type="date"></label>
+      <label>Year level<input id="f-year" maxlength="20" placeholder="e.g. Year 3"></label>
+    </div>
+    <div class="pl">Card color</div><div class="pk" id="pk-color"></div>
+    <div class="pl">Logo</div><div class="pk" id="pk-logo"></div>
+    <div class="pl">Avatar</div><div class="pk" id="pk-avatar"></div>
+    <div class="pl">Sticker</div><div class="pk" id="pk-sticker"></div>
+    <div class="pl">Card pattern</div><div class="pk" id="pk-pattern"></div>
+    <div class="pl">Avatar frame</div><div class="pk" id="pk-frame"></div>
+    <div class="pl">App theme</div><div class="pk" id="pk-theme"></div>
+  </section>
+
+  <section>
+    <h2>My to-dos</h2>
+    <label>Task<input id="t-title" maxlength="80" placeholder="What do you want to get done?"></label>
+    <div class="grid2">
+      <label>Category<select id="t-cat"><option>Work</option><option>Habits</option><option>Lifestyle</option><option>Studying</option><option>Other</option></select></label>
+      <label>When<select id="t-scope"><option value="day">Today</option><option value="week">This week</option><option value="month">This month</option></select></label>
+    </div>
+    <div class="pl">Icon</div><div class="pk" id="pk-temoji"></div>
+    <button class="btn" data-a="add">+ To-do</button>
+    <div class="tabs" id="tabs"></div>
+    <div id="tasks"></div>
+  </section>
+
+  <section>
+    <h2>Vouchers</h2><p class="sub" style="margin-bottom:12px">Spend coins on a voucher, fill in the blanks, and send it over.</p><div id="vshop"></div><div id="vouchers"></div></section><section><h2>Shop</h2>
+    <p class="sub" style="margin-bottom:12px">Finish a task to earn 10 coins. Spend them on new looks, then equip items in "Customize".</p>
+    <div id="shop"></div>
+  </section>
+</main>
+<div id="toast" role="status"></div>
+
+<script>
+const KEY='studentPlanner.v1', REWARD=10;
+const mk=(type,list)=>list.map(([v,name,price])=>({id:type+':'+v,type,v,name,price}));
+const SHOP=[
+ ...mk('color',[['#d9487f|#ffffff','Rose',0],['#6f5be8|#ffffff','Violet',0],['#23867a|#ffffff','Teal',0],['#f2a65a|#3a2a33','Peach',40],['#264653|#ffffff','Midnight',60],['#ffd3e4|#5a2b42','Blush',80]]),
+ ...mk('logo',[['🎓','Cap',0],['📚','Books',0],['🌸','Blossom',0],['⭐','Star',0],['🦋','Butterfly',50],['🌙','Moon',50],['🔥','Flame',70],['👑','Crown',120]]),
+ ...mk('avatar',[['🙂','Smile',0],['😎','Cool',0],['🐱','Cat',0],['🦊','Fox',0],['🐼','Panda',30],['🐸','Frog',40],['🦄','Unicorn',60],['🧚‍♀️','Fairy',100]]),
+ ...mk('sticker',[['💖','Heart',40],['✨','Sparkle',50],['🌈','Rainbow',80],['🏆','Trophy',150]]),
+ ...mk('temoji',[['✅','Check',0],['📖','Book',0],['💼','Work',0],['🏃','Run',0],['🧘','Calm',0],['🛒','Shop',0],['🎨','Art',20],['💻','Laptop',20],['🍎','Apple',20],['🎧','Music',25],['🌱','Sprout',25],['💌','Letter',30]])
+];
+SHOP.push(...mk('pattern',[['none','Plain',0],['dots','Dots',40],['grid','Grid paper',40],['stripes','Stripes',50],['check','Checkers',60]]),
+ ...mk('frame',[['none','Classic',0],['shadow','Pop shadow',30],['dashed','Stitched',40],['double','Double line',50],['gold','Gold',70]]),
+ ...mk('theme',[['pink','Rose',0],['ocean','Ocean',60],['mint','Mint',60],['grape','Grape',60],['sunny','Sunny',60]]));
+const TYPES={color:'Card colors',pattern:'Card patterns',logo:'Logos',avatar:'Avatars',frame:'Avatar frames',sticker:'Stickers',theme:'App themes',temoji:'Task icons'};
+const TXT=new Set(['pattern','frame']);
+const THEMES={pink:null,ocean:'#3b7fd9',mint:'#27976a',grape:'#7b5ce6',sunny:'#d98a1f'};
+const swc=i=>i.type==='theme'?(THEMES[i.v]||'#d9487f'):i.v.split('|')[0];
+const cm=n=>`color-mix(in srgb,var(--cfg) ${n}%,transparent)`;
+const PAT={none:['none','auto'],dots:[`radial-gradient(${cm(24)} 2px,transparent 2.5px)`,'18px 18px'],grid:[`linear-gradient(${cm(16)} 1px,transparent 1px),linear-gradient(90deg,${cm(16)} 1px,transparent 1px)`,'20px 20px'],stripes:[`repeating-linear-gradient(45deg,${cm(14)} 0 8px,transparent 8px 16px)`,'auto'],check:[`conic-gradient(${cm(14)} 25%,transparent 0 50%,${cm(14)} 0 75%,transparent 0)`,'28px 28px']};
+/* Voucher types: edit this list to add or change vouchers. fields = [label, placeholder] */
+const VOUCHERS=[
+ {id:'food',icon:'🍜',name:'Food date',price:150,desc:'You pick what we eat.',fields:[['What are you craving?','e.g. ramen, bubble tea'],['Where? (a place or an area)',''],['Anything else I should know?','Allergies, extras, mood']]},
+ {id:'activity',icon:'🎡',name:'Activity date',price:200,desc:'You pick what we do.',fields:[['What do you want to do?','e.g. movie, arcade, picnic'],['Where would you like to go?',''],['Notes','']]},
+ {id:'gift',icon:'🎁',name:'Treat or gift',price:120,desc:'Something you want.',fields:[['What would you like?',''],['Link or where to find it',''],['Size, color or other details','']]},
+ {id:'favor',icon:'🛠️',name:'Favor',price:100,desc:'I do something for you.',fields:[['What should I do for you?',''],['Any details?','']]},
+ {id:'wish',icon:'🌟',name:'Any wish',price:300,desc:'Your call, within reason.',fields:[['Your wish',''],['Details','']]}
+];
+const byId=id=>SHOP.find(i=>i.id===id);
+const fresh=()=>({coins:0,owned:[],tasks:[],vouchers:[],view:'all',idNo:String(Math.floor(100000+Math.random()*900000)),
+ profile:{name:'',school:'',birthday:'',year:'',color:'#d9487f|#ffffff',logo:'🎓',avatar:'🙂',avatarImg:'',sticker:'',pattern:'none',frame:'none',theme:'pink'}});
+let S=fresh(), newEmoji='✅';
+try{const raw=localStorage.getItem(KEY);if(raw){const d=JSON.parse(raw);S={...S,...d,profile:{...S.profile,...(d.profile||{})}}}}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){toast('Could not save. Try a smaller photo.')}};
+const $=id=>document.getElementById(id);
+const esc=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const owns=i=>i.price===0||S.owned.includes(i.id);
+let tt;function toast(m){const t=$('toast');t.textContent=m;t.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('on'),2200)}
+
+function renderCard(){
+  const p=S.profile,[bg,fg]=p.color.split('|');
+  let bd='Add your birthday';
+  if(p.birthday){const d=new Date(p.birthday+'T00:00');if(!isNaN(d))bd=d.toLocaleDateString(undefined,{day:'numeric',month:'long',year:'numeric'})}
+  const c=$('card');c.style.setProperty('--cbg',bg);c.style.setProperty('--cfg',fg);
+  const pt=PAT[p.pattern]||PAT.none;c.style.backgroundImage=pt[0];c.style.backgroundSize=pt[1];
+  const ac=THEMES[p.theme],rs=document.documentElement.style;
+  if(ac){rs.setProperty('--accent',ac);rs.setProperty('--onaccent','#fff')}else{rs.removeProperty('--accent');rs.removeProperty('--onaccent')}
+  c.innerHTML=`<div class="ch"><span class="logo">${p.logo}</span><b>${esc(p.school)||'Your school'}</b><span>Student ID</span></div>
+  <div class="cb"><div class="av fr-${p.frame}">${p.avatarImg?`<img src="${p.avatarImg}" alt="Avatar">`:p.avatar}</div>
+  <div class="cf"><div class="nm">${esc(p.name)||'Your name'}</div><div>🎂 ${bd}</div><div>🏫 ${esc(p.year)||'Year level'}</div></div></div>
+  ${p.sticker?`<span class="st">${p.sticker}</span>`:''}<div class="cn">ID No. ${S.idNo}</div>`;
+}
+function renderPickers(){
+  const p=S.profile,eq={color:p.color,logo:p.logo,avatar:p.avatarImg?'':p.avatar,sticker:p.sticker,pattern:p.pattern,frame:p.frame,theme:p.theme};
+  for(const t of ['color','logo','avatar','sticker','pattern','frame','theme']){
+    let h=SHOP.filter(i=>i.type===t&&owns(i)).map(i=>(t==='color'||t==='theme')
+      ?`<button class="sw sel-${eq[t]===i.v}${eq[t]===i.v?' sel':''}" data-a="eq" data-t="${t}" data-v="${i.v}" style="background:${swc(i)}" aria-label="${i.name}"></button>`
+      :`<button class="${eq[t]===i.v?'sel':''}" data-a="eq" data-t="${t}" data-v="${i.v}" aria-label="${i.name}">${TXT.has(t)?i.name:i.v}</button>`).join('');
+    if(t==='sticker')h=`<button class="${p.sticker?'':'sel'}" data-a="eq" data-t="sticker" data-v="" aria-label="No sticker">∅</button>`+h;
+    if(t==='avatar')h+=`<label class="up${p.avatarImg?' sel':''}" style="margin:0">📷 Upload photo<input type="file" accept="image/*" id="f-photo" hidden></label>`;
+    $('pk-'+t).innerHTML=h;
+  }
+  const ph=$('f-photo');if(ph)ph.onchange=e=>photo(e.target.files[0]);
+}
+function renderTaskForm(){
+  const list=SHOP.filter(i=>i.type==='temoji'&&owns(i));
+  if(!list.some(i=>i.v===newEmoji))newEmoji=list[0].v;
+  $('pk-temoji').innerHTML=list.map(i=>`<button class="${i.v===newEmoji?'sel':''}" data-a="te" data-v="${i.v}" aria-label="${i.name}">${i.v}</button>`).join('');
+}
+function renderTasks(){
+  const tabs=[['all','All'],['day','Today'],['week','This week'],['month','This month']];
+  $('tabs').innerHTML=tabs.map(([k,l])=>`<button class="${S.view===k?'sel':''}" data-a="view" data-v="${k}">${l}</button>`).join('');
+  const L=S.tasks.filter(t=>S.view==='all'||t.scope===S.view);
+  const sl={day:'Today',week:'Week',month:'Month'};
+  $('tasks').innerHTML=L.length?L.map(t=>`<div class="task${t.done?' done':''}"><button class="ck" data-a="done" data-id="${t.id}" aria-label="Mark done">${t.done?'✓':''}</button>
+   <span style="font-size:1.4rem">${t.emoji}</span><div class="tt">${esc(t.title)}<span class="chip">${esc(t.cat)}</span><span class="chip">${sl[t.scope]}</span></div>
+   <button class="x" data-a="del" data-id="${t.id}" aria-label="Delete task">✕</button></div>`).join('')
+   :'<div class="empty">Nothing here yet. Add your first to-do above.</div>';
+}
+function renderShop(){
+  $('coins').textContent='🪙 '+S.coins;
+  $('shop').innerHTML=Object.keys(TYPES).map(t=>{
+    const items=SHOP.filter(i=>i.type===t&&i.price>0);
+    return `<div class="pl">${TYPES[t]}</div><div class="items">`+items.map(i=>{
+      const o=owns(i);
+      const pv=(t==='color'||t==='theme')?`<i style="background:${swc(i)}"></i>`:TXT.has(t)?i.name:i.v;
+      return `<div class="item"><div class="pv">${pv}</div><b>${i.name}</b><small>${o?'Owned':'🪙 '+i.price}</small>
+      <button data-a="buy" data-id="${i.id}" ${o||S.coins<i.price?'disabled':''}>${o?'Owned':'Buy'}</button></div>`}).join('')+'</div>';
+  }).join('');
+}
+function photo(f){
+  if(!f)return;const r=new FileReader();
+  r.onload=()=>{const im=new Image();im.onload=()=>{
+    const s=Math.min(im.width,im.height),c=document.createElement('canvas');c.width=c.height=240;
+    c.getContext('2d').drawImage(im,(im.width-s)/2,(im.height-s)/2,s,s,0,0,240,240);
+    S.profile.avatarImg=c.toDataURL('image/jpeg',.82);save();renderCard();renderPickers()};im.src=r.result};
+  r.readAsDataURL(f);
+}
+const all=()=>{renderCard();renderPickers();renderTaskForm();renderTasks();renderShop();renderVouchers()};
+
+for(const k of ['name','school','birthday','year']){
+  const el=$('f-'+k);el.value=S.profile[k];
+  el.addEventListener('input',()=>{S.profile[k]=el.value;save();renderCard()});
+}
+document.addEventListener('click',e=>{
+  const b=e.target.closest('[data-a]');if(!b)return;const a=b.dataset.a,p=S.profile;
+  if(a==='eq'){const t=b.dataset.t,v=b.dataset.v;
+    if(t==='avatar'){p.avatar=v;p.avatarImg=''}else p[t]=v;save();renderCard();renderPickers()}
+  else if(a==='te'){newEmoji=b.dataset.v;renderTaskForm()}
+  else if(a==='view'){S.view=b.dataset.v;save();renderTasks()}
+  else if(a==='add'){const ti=$('t-title');const title=ti.value.trim();
+    if(!title){ti.focus();toast('Type a task first');return}
+    S.tasks.unshift({id:Date.now().toString(36),title,cat:$('t-cat').value,scope:$('t-scope').value,emoji:newEmoji,done:false,paid:false});
+    ti.value='';save();renderTasks();toast('Task added')}
+  else if(a==='done'){const t=S.tasks.find(x=>x.id===b.dataset.id);if(!t)return;t.done=!t.done;
+    if(t.done&&!t.paid){t.paid=true;S.coins+=REWARD;toast('+'+REWARD+' coins! 🪙')}
+    save();renderTasks();renderShop();renderVouchers()}
+  else if(a==='del'){S.tasks=S.tasks.filter(x=>x.id!==b.dataset.id);save();renderTasks()}
+  else if(a==='vbuy'){const d=VOUCHERS.find(x=>x.id===b.dataset.id);
+    if(d&&S.coins>=d.price){S.coins-=d.price;S.vouchers.unshift({id:Date.now().toString(36)+Math.floor(Math.random()*99),type:d.id,answers:{},sent:false});save();renderShop();renderVouchers();toast('Voucher bought! Fill it in below.')}}
+  else if(a==='vsend'){sendVoucher(b.dataset.id)}
+  else if(a==='buy'){const i=byId(b.dataset.id);
+    if(i&&!owns(i)&&S.coins>=i.price){S.coins-=i.price;S.owned.push(i.id);save();all();toast('Unlocked '+i.name+'!')}}
+});
+$('t-title').addEventListener('keydown',e=>{if(e.key==='Enter')document.querySelector('[data-a="add"]').click()});
+const renderVouchers=()=>{
+  $('vshop').innerHTML='<div class="items">'+VOUCHERS.map(d=>`<div class="item"><div class="pv">${d.icon}</div><b>${d.name}</b><small>${d.desc}</small><small>🪙 ${d.price}</small><button data-a="vbuy" data-id="${d.id}" ${S.coins<d.price?'disabled':''}>Buy</button></div>`).join('')+'</div>';
+  $('vouchers').innerHTML=S.vouchers.length?S.vouchers.map(v=>{const d=VOUCHERS.find(x=>x.id===v.type);if(!d)return '';
+    return `<div class="vc${v.sent?' sent':''}"><h3>${d.icon} ${d.name}<span class="badge">${v.sent?'Sent ✓':'Ready to fill'}</span></h3>`
+    +d.fields.map((f,i)=>`<label>${f[0]}<textarea rows="2" placeholder="${f[1]}" data-vid="${v.id}" data-k="${i}">${esc(v.answers[i]||'')}</textarea></label>`).join('')
+    +`<button class="btn" data-a="vsend" data-id="${v.id}">${v.sent?'Send again':'Send it over'}</button></div>`}).join('')
+   :'<div class="empty">No vouchers yet. Buy one above.</div>';
+};
+async function sendVoucher(id){
+  const v=S.vouchers.find(x=>x.id===id),d=v&&VOUCHERS.find(x=>x.id===v.type);if(!d)return;
+  if(!d.fields.some((f,i)=>(v.answers[i]||'').trim())){toast('Fill in a blank first');return}
+  const text=`${d.icon} ${d.name} voucher\n\n`+d.fields.map((f,i)=>`${f[0]}\n${(v.answers[i]||'').trim()||'-'}`).join('\n\n')+'\n\nSent from my Student Planner 🎓';
+  try{if(navigator.share)await navigator.share({text});else throw 0}
+  catch(e){if(e&&e.name==='AbortError')return;
+    try{await navigator.clipboard.writeText(text);toast('Copied! Paste it in a chat to send.')}
+    catch(_){const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();
+      try{document.execCommand('copy');toast('Copied! Paste it in a chat to send.')}catch(__){toast('Could not copy')}ta.remove()}}
+  v.sent=true;save();renderVouchers();
+}
+document.addEventListener('input',e=>{const t=e.target;if(t.dataset&&t.dataset.vid){const v=S.vouchers.find(x=>x.id===t.dataset.vid);if(v){v.answers[t.dataset.k]=t.value;save()}}});
+all();
+</script>
+</body>
+</html>
